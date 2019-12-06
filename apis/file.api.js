@@ -2,6 +2,12 @@ var express = require("express");
 var router = express.Router();
 var path = require("path");
 var multer = require("multer");
+var cloudinary = require("cloudinary").v2;
+cloudinary.config({
+  cloud_name: "dtoojisfz",
+  api_key: "967129644389933",
+  api_secret: "dkmWXve4JaOBJvksJN6JRu6yAdk"
+});
 
 var filePath = path.join(__dirname, "../public/images");
 var absPath = "";
@@ -11,6 +17,11 @@ var storage = multer.diskStorage({
   },
   filename: function(req, file, callback) {
     var arr = file.originalname.split(".");
+    console.log("file", file);
+    cloudinary.uploader.upload(file.path, function(error, result) {
+      console.log("result", result);
+    });
+
     var fileExt = arr[arr.length - 1];
     var filename = file.fieldname + "-" + Date.now() + "." + fileExt;
     absPath = "images" + "/" + filename;
